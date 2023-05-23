@@ -1,26 +1,31 @@
 # Fred Metabolism
 
- This is my edit of kamelzarandah edit of spaghetti_metabolismo made by Malik. In this edit you will be able to create consumables. Each one can affect player cores, increasing stamina or health and even overpowers (gold cores). You have some items created as an example. This script works with spaghetti_hud, i added it in case you don't have it i also renamed it to make some functions work properly. This is a script for RedM and VORP framework.
+ This is my edit of Fred Meatbolism for VORP. 
+  In this edit you will be able to create consumables. Each one can affect player cores, increasing stamina or health and even overpowers (gold cores). You have some items created as an example. This script works with fred_hud. This is a script for RedM and VORP framework.
 
- IMPORTANT: USE THE HUD I UPLOADED TO MAKE IT WORK CORRECTLY.
+ IMPORTANT: USE THE HUD - or make your own, start with the provided hud as your base.
  
- SUPER IMPORTANT: IF YOU HAVE ANY CONSUMABLE ALREADY REGISTERED YOU WILL HAVE TO DETELE IT SINCE THIS SCRIPT REGISTER THOSE AUTOMATICALLY, THAT MAY CAUSE ISSUES WITH THE SCRIPT.
+ SUPER IMPORTANT: Do not register items for use in multiple scripts. 
+ Examples: 
+ Apples in the syn_horse_items script and apples in metabolism. 
+ Medicines in any doctors scripts and medicines in the metabolism script. 
+ Alcohol in any saloon scripts and alcohol in the metabolism script. 
+ Only list items for use in one scripts.
 
- ***I WILL NOT SUPPORT THIS SCRIPT ANYMORE, YOU CAN CHECK THE FULL VERSION ON THIS DISCORD!***
- https://discord.gg/rdpZH9vcPX
-
+Limited support is available in our discord for this DB version, so long as it has not been modified. 
+[DISCORD](`https://discord.gg/pTgJNjVDby`)
  **Hope it helps!**
 
 # Content
-
-- Easy way to configure your consumables.
+- Configure your items in the database with easy on off flags.
+- Generates items using standard templates, and a multiplier. 
+- Add special items that load last, so you can have special effects for specific players or stores.
+Previous features.
 - Weather effect on metabolism depending if it is cold or hot. 
 - Multiple core effects and Gold overpowers.
-- Example of consumables on the Config file.
 - Many configs to play with.
 
 # Event
-
 Use 
 ```
 TriggerEvent("fred:consume", hunger, thirst, innercorestamina, innercorestaminagold, outercorestaminagold, innercorehealth, innercorehealthgold, outercorehealthgold)
@@ -28,15 +33,26 @@ TriggerEvent("fred:consume", hunger, thirst, innercorestamina, innercorestaminag
 This will work on any other resource, it is useful if you want to make a specific change on any value.
 
 # TODO: 
-
-- [X] Add animation for consuming. 
+- [X] Add animation for eat/bread. 
+- [X] Add animation for soup/bowl. 
+- [X] Add animation for drink (non alcohol). 
+- [X] Add animation for drink (alcohol). 
 - [X] Config.lua file for easy configuration.
+- [X] Add databased items.
+- [X] Add flags to items database. 
+- [X] Added more animations options. 
+- [ ] Add db table for custom objects paired with animations with key in items table.
+- [ ] Added more animations options.
+- [ ] Add animation for eat/plate. 
+- [ ] Add animation for smoking.  
+- [ ] Add animation for medicine (elixir).  
+- [ ] Add animation for medicine (salve).  
+- [ ] Add animation for medicine (pills).  
 
 ## CHANGELOG:
-
 ```
-18/01/21 - Corrected some notification issues and name display not showing up correctly.
-         - Removed Outer Core Health comments on config.lua
+10/01/22 - Add DB features
+05/01/23 - Add Special Items feature
 ```
 
 ```
