@@ -13,7 +13,7 @@
  Only list items for use in one scripts.
 
 Limited support is available in our discord for this DB version, so long as it has not been modified. 
-[DISCORD](`https://discord.gg/pTgJNjVDby`)
+[DISCORD]  https://discord.gg/pTgJNjVDby  
  **Hope it helps!**
 
 # Content
@@ -48,6 +48,7 @@ This will work on any other resource, it is useful if you want to make a specifi
 - [ ] Add animation for medicine (elixir).  
 - [ ] Add animation for medicine (salve).  
 - [ ] Add animation for medicine (pills).  
+- [ ] Transfer client/server now supports arrays, update data pass.  
 
 ## CHANGELOG:
 ```
