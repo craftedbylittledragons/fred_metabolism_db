@@ -4,5 +4,5 @@ ALTER TABLE `items` ADD `metabolismrank` INT(3) NOT NULL DEFAULT '0' AFTER `cons
 ALTER TABLE `items` ADD `solidorliquid` int(1) NOT NULL DEFAULT '0' AFTER `metabolismrank`; 
 ALTER TABLE `items` ADD `medical` int(1) NOT NULL DEFAULT '0' AFTER `solidorliquid`; 
 ALTER TABLE `items` ADD `alcohol` int(1) NOT NULL DEFAULT '0' AFTER `medical`;  
-ALTER TABLE `items` ADD `valuerank` INT(3) NOT NULL DEFAULT '0' AFTER `alcohol`;  
- 
+ALTER TABLE `items` ADD `valuerank` INT(3) NOT NULL DEFAULT '0' AFTER `alcohol`;    
+ALTER TABLE `items` ADD `propname` VARCHAR(255) NOT NULL DEFAULT '0' AFTER `valuerank`;  
