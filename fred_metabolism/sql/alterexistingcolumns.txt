@@ -1,0 +1,8 @@
+ 
+
+ALTER TABLE `items` CHANGE `consumable` `consumable` INT(1) NOT NULL DEFAULT '0' 
+ALTER TABLE `items` CHANGE `metabolismrank` `metabolismrank` INT(3) NOT NULL DEFAULT '0'; 
+ALTER TABLE `items` CHANGE `solidorliquid` `solidorliquid` INT(1) NOT NULL DEFAULT '0'; 
+ALTER TABLE `items` CHANGE `medical` `medical` INT(1) NOT NULL DEFAULT '0'; 
+ALTER TABLE `items` CHANGE `alcohol` `alcohol` INT(1) NOT NULL DEFAULT '0'; 
+ALTER TABLE `items` CHANGE `valuerank` `valuerank` INT(3) NOT NULL DEFAULT '0'; 
