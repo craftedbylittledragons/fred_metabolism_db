@@ -135,7 +135,9 @@ AddEventHandler(new_event_clientside_detailedItem, function(ItemName, DisplayNam
 	local DrinkCount = 0			
 	local Effect = ""		
 	local EffectDuration = 0 
-	local PropName = "p_mugcoffee01x" 
+	if PropName == "" or PropName == 0 or PropName == nil then 
+		PropName = "p_mugcoffee01x" 
+	end 
 
 	flag_item_found = false
 	for n,m in pairs(ItemsToUse) do   
@@ -177,7 +179,9 @@ AddEventHandler(new_event_clientside_detailedItemFood, function(ItemName, Displa
 	local DrinkCount = 0			
 	local Effect = ""		
 	local EffectDuration = 0 
-	local PropName = "p_bread05x" 
+	if PropName == "" or PropName == 0 or PropName == nil then 
+		PropName = "p_bread05x" 
+	end  
 
 	flag_item_found = false
 	for n,m in pairs(ItemsToUse) do   
@@ -220,7 +224,9 @@ AddEventHandler(new_event_clientside_detailedItemAlcohol, function(ItemName, Dis
 	local DrinkCount = 12		
 	local Effect = "PlayerDrunkSaloon1"		
 	local EffectDuration = 5000 
-	local PropName = "p_bottlebeer01a" 
+	if PropName == "" or PropName == 0 or PropName == nil then 
+		PropName = "p_bottlebeer01a" 
+	end   
 
 	flag_item_found = false
 	for n,m in pairs(ItemsToUse) do   

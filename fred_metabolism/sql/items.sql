@@ -20,7 +20,8 @@ CREATE TABLE `items` (
   `solidorliquid` tinyint(1) NOT NULL,
   `medical` tinyint(1) NOT NULL,
   `alcohol` tinyint(1) NOT NULL,
-  `valuerank` int(3) NOT NULL
+  `valuerank` int(3) NOT NULL,
+  `propname` int(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
 --
