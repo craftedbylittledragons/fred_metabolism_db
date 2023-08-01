@@ -41,8 +41,9 @@ This will work on any other resource, it is useful if you want to make a specifi
 - [X] Add databased items.
 - [X] Add flags to items database. 
 - [X] Added more animations options. 
-- [ ] Add db table for custom objects paired with animations with key in items table.
-- [ ] Added more animations options.
+- [X] Add column to items table for custom objects in game objects
+- [X] Add column to items table for custom animation key (ex: drink, eat, bowl, syringe)
+- [X] Added more animations options.
 - [ ] Add animation for eat/plate. 
 - [ ] Add animation for smoking.  
 - [ ] Add animation for medicine (elixir).  
@@ -54,6 +55,7 @@ This will work on any other resource, it is useful if you want to make a specifi
 ```
 10/01/22 - Add DB features
 05/01/23 - Add Special Items feature
+07/01/23 - Added the custom objects and animations
 ```
 
 ```
