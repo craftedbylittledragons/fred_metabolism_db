@@ -42,6 +42,18 @@ Citizen.CreateThread(function()
             trigger_breakout = trigger_breakout +1
         end 	
     end   
+
+
+    before_databasecalls = #ItemsToUse
+    Loaded_Items_Medical = GetItems_Medical(ItemsToUse)   
+    while Loaded_Items_Medical == false do 
+        Citizen.Wait(1000) 
+        if trigger_breakout >= 10 then 
+            break 
+        else 
+            trigger_breakout = trigger_breakout +1
+        end 	
+    end       
  
     before_databasecalls = #ItemsToUse
     Loaded_Items_Special = GetItems_Special()   
@@ -105,7 +117,8 @@ function GetItems_SolidFood(ItemsToUse)
                         if(s == "item") then                if t ~= nil then    ItemName = t            end end   
                         if(s == "label") then               if t ~= nil then    DisplayName = t         end end   
                         if(s == "metabolismrank") then      if t ~= nil then    MetabolismRank = t      end end    
-                        if(s == "propname") then            if t ~= nil then    PropName = t            end end                         
+                        if(s == "propname") then            if t ~= nil then    PropName = t            end end    
+                        if(s == "animation") then            if t ~= nil then    Animation = t          end end                        
                     end                     
                 end   
                 local r = #ItemsToUse+1
@@ -149,7 +162,8 @@ function GetItems_LiquidDrink(ItemsToUse)
                         if(s == "item") then                if t ~= nil then    ItemName = t            end end   
                         if(s == "label") then               if t ~= nil then    DisplayName = t         end end   
                         if(s == "metabolismrank") then      if t ~= nil then    MetabolismRank = t      end end    
-                        if(s == "propname") then            if t ~= nil then    PropName = t            end end                         
+                        if(s == "propname") then            if t ~= nil then    PropName = t            end end     
+                        if(s == "animation") then            if t ~= nil then    Animation = t          end end                       
                     end                     
                 end   
                 local r = #ItemsToUse+1
@@ -193,7 +207,8 @@ function GetItems_LiquidAlcoholDrink(ItemsToUse)
                         if(s == "item") then                if t ~= nil then    ItemName = t            end end   
                         if(s == "label") then               if t ~= nil then    DisplayName = t         end end   
                         if(s == "metabolismrank") then      if t ~= nil then    MetabolismRank = t      end end    
-                        if(s == "propname") then            if t ~= nil then    PropName = t            end end                         
+                        if(s == "propname") then            if t ~= nil then    PropName = t            end end     
+                        if(s == "animation") then            if t ~= nil then   Animation = t          end end                       
                     end                     
                 end       
                 local r = #ItemsToUse+1
@@ -210,6 +225,51 @@ function GetItems_LiquidAlcoholDrink(ItemsToUse)
     end   
     return(true) 
 end --- end the function to load items 
+
+
+function GetItems_Medical(ItemsToUse)
+
+    local trigger_getitems = false 
+    local malformed_entry = false 
+    local rowtoupdate = 0
+	SQL_READ_QUERY_ITEM  = "SELECT * FROM `items` WHERE `consumable` = 1 and `medical` = 1 and `alcohol` = 0;"  
+    -- call the database
+    exports.ghmattimysql:execute(SQL_READ_QUERY_ITEM, function(result)     	
+
+        local ItemName = ""	
+        local DisplayName = ""			 
+        local Animation = "longbottle"		
+        local PropName = ""		
+        local Metabolism = 500	 	 
+        local MetabolismRank = 0	 
+   
+        if result[1] ~= nil then 
+            for n,m in pairs(result) do    
+                if type(m) == "table" then 
+                    for s,t in pairs(m) do 
+                        --code goes here                    
+                        if(s == "item") then                if t ~= nil then    ItemName = t            end end   
+                        if(s == "label") then               if t ~= nil then    DisplayName = t         end end   
+                        if(s == "metabolismrank") then      if t ~= nil then    MetabolismRank = t      end end    
+                        if(s == "propname") then            if t ~= nil then    PropName = t            end end     
+                        if(s == "animation") then           if t ~= nil then    Animation = t           end end                       
+                    end                     
+                end       
+                local r = #ItemsToUse+1
+                table.insert(ItemsToUse, r) 
+                ItemsToUse[r] = {}             
+                BuildItemsToUseTable(r,   ItemName, "Medical", DisplayName, MetabolismRank, PropName, Animation)                         
+
+            end        
+        end
+        trigger_getitems = true
+    end) -- exports.ghmattimysql:execute   
+    while trigger_getitems == false do 
+        Citizen.Wait(100)
+    end   
+    return(true) 
+end --- end the function to load items 
+
 
 function GetItems_Special() 
 
@@ -315,13 +375,16 @@ AddEventHandler(Config.ScriptName..":sendItemsRequested", function(--[[source,]]
 	for n,m in pairs(ItemsToUse) do   
 		if ItemsToUse[n]["TYPE"] == TYPE then 
 			if TYPE == "Food" then 
-                TriggerClientEvent(Config.ScriptName..":catch:detailedItem:Food",_source, ItemsToUse[n]["Name"], ItemsToUse[n]["DisplayName"], ItemsToUse[n]["MetabolismRank"], ItemsToUse[n]["PropName"])
+                TriggerClientEvent(Config.ScriptName..":catch:detailedItem:Food",_source, ItemsToUse[n]["Name"], ItemsToUse[n]["DisplayName"], ItemsToUse[n]["MetabolismRank"], ItemsToUse[n]["PropName"], ItemsToUse[n]["Animation"])
             end 
 			if TYPE == "Drink" then 
-                TriggerClientEvent(Config.ScriptName..":catch:detailedItem:Drink",_source, ItemsToUse[n]["Name"], ItemsToUse[n]["DisplayName"], ItemsToUse[n]["MetabolismRank"], ItemsToUse[n]["PropName"])
+                TriggerClientEvent(Config.ScriptName..":catch:detailedItem:Drink",_source, ItemsToUse[n]["Name"], ItemsToUse[n]["DisplayName"], ItemsToUse[n]["MetabolismRank"], ItemsToUse[n]["PropName"], ItemsToUse[n]["Animation"])
             end
 			if TYPE == "Alcohol" then 
-                TriggerClientEvent(Config.ScriptName..":catch:detailedItem:Alcohol",_source, ItemsToUse[n]["Name"], ItemsToUse[n]["DisplayName"], ItemsToUse[n]["MetabolismRank"], ItemsToUse[n]["PropName"])
+                TriggerClientEvent(Config.ScriptName..":catch:detailedItem:Alcohol",_source, ItemsToUse[n]["Name"], ItemsToUse[n]["DisplayName"], ItemsToUse[n]["MetabolismRank"], ItemsToUse[n]["PropName"], ItemsToUse[n]["Animation"])
+            end 
+			if TYPE == "Medical" then 
+                TriggerClientEvent(Config.ScriptName..":catch:detailedItem:Medical",_source, ItemsToUse[n]["Name"], ItemsToUse[n]["DisplayName"], ItemsToUse[n]["MetabolismRank"], ItemsToUse[n]["PropName"], ItemsToUse[n]["Animation"])
             end 
 			if TYPE == "Special" then             
                 TriggerClientEvent(Config.ScriptName..":catch:detailedItem:Special",_source)
@@ -343,6 +406,9 @@ AddEventHandler(Config.ScriptName..":SendReady", function(--[[source,]] TYPE)
     end
     if TYPE == "Alcohol" then 
         TriggerClientEvent(Config.ScriptName..":catch:ReadyCheck:Alcohol",_source, Loaded_Items_LiquidAlcoholDrink, #ItemsToUse)
+    end  
+    if TYPE == "Medical" then 
+        TriggerClientEvent(Config.ScriptName..":catch:ReadyCheck:Medical",_source, Loaded_Items_Medical, #ItemsToUse)
     end 
     if TYPE == "Special" then 
         TriggerClientEvent(Config.ScriptName..":catch:ReadyCheck:Special",_source, Loaded_Items_Special, #ItemsToUse)

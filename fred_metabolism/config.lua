@@ -1,6 +1,4 @@
---[[
-mk change items to work i hope
---]]
+ 
 Config = {
 
     -- ##### SELECT YOUR FRAMEWORK #####
@@ -109,7 +107,7 @@ Config = {
     -- MAKE SURE YOU CHANGE THE DEFAULT VALUES. THE ONES DISPLAYED HERE ARE TEST VALUES!-
  
 
-    Config.ItemsToUse = {  -- do not change this array
+    Config.ItemsToUse = {  -- do not change this array, it's just the initializer for the automated db
 		{	
         ["Name"] = "water",	
         ["TYPE"] = "Drink",
@@ -139,6 +137,8 @@ Config = {
     }
     
     Config.SPECIAL_ITEMS = {  -- Add special items here. 
+    -- These are items you want full control over the settings. 
+    -- These are loaded last, so that the settings over ride the database entries. 
         {	
             ["Name"] = "holywater",	
             ["TYPE"] = "Special", -- do not change this flag.

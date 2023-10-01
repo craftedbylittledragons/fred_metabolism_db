@@ -482,56 +482,75 @@ AddEventHandler(Config.ScriptName..":useItem", function(itemname)
 		bowl(index, ItemsToUse[index]["PropName"], ItemsToUse[index]["Effect"], ItemsToUse[index]["EffectDuration"])
 
 	elseif (ItemsToUse[index]["Animation"] == "shortbottle") then
-		shortbottole(index, ItemsToUse[index]["PropName"], ItemsToUse[index]["Effect"], ItemsToUse[index]["EffectDuration"], ItemsToUse[index]["DrinkCount"], ItemsToUse[index]["SoftAlcohol"],ItemsToUse[index]["HardAlcohol"])
+		shortbottle(index, ItemsToUse[index]["PropName"], ItemsToUse[index]["Effect"], ItemsToUse[index]["EffectDuration"], ItemsToUse[index]["DrinkCount"], ItemsToUse[index]["SoftAlcohol"],ItemsToUse[index]["HardAlcohol"])
 		
 	elseif (ItemsToUse[index]["Animation"] == "longbottle") then
 		longbottle(index, ItemsToUse[index]["PropName"], ItemsToUse[index]["Effect"], ItemsToUse[index]["EffectDuration"], ItemsToUse[index]["DrinkCount"], ItemsToUse[index]["SoftAlcohol"],ItemsToUse[index]["HardAlcohol"])
 		
 	elseif (ItemsToUse[index]["Animation"] == "syringe") then
 		syringe(index, ItemsToUse[index]["PropName"], ItemsToUse[index]["Effect"], ItemsToUse[index]["EffectDuration"])
+		
+	elseif (ItemsToUse[index]["Animation"] == "bandage") then
+		bandage(index, ItemsToUse[index]["PropName"], ItemsToUse[index]["Effect"], ItemsToUse[index]["EffectDuration"])
 
 	elseif (ItemsToUse[index]["Animation"] == "berry") then
 		berry(index, ItemsToUse[index]["PropName"], ItemsToUse[index]["Effect"], ItemsToUse[index]["EffectDuration"])
 
 	end
 
-	--
 	-- CORES
-	--
 	if (ItemsToUse[index]["InnerCoreStamina"] ~= 0) then
+		-- GetAttributeCoreValue
 		local stamina = Citizen.InvokeNative(0x36731AC041289BB1, PlayerPedId(), 1)
 		if stamina == false then
 			newStamina = tonumber(ItemsToUse[index]["InnerCoreStamina"])
+			-- SetAttributeCoreValue
 			Citizen.InvokeNative(0xC6258F41D86676E0, PlayerPedId(), 1, newStamina)
 		else
+			-- GetAttributeCoreValue
 			stamina = Citizen.InvokeNative(0x36731AC041289BB1, PlayerPedId(), 1) --ACTUAL STAMINA CORE GETTER
 			newStamina = stamina + tonumber(ItemsToUse[index]["InnerCoreStamina"])
 			if (newStamina > 100) then	newStamina = 100	end
+			-- SetAttributeCoreValue
 			Citizen.InvokeNative(0xC6258F41D86676E0, PlayerPedId(), 1, newStamina)
 		end
-	end
-
-	if (ItemsToUse[index]["InnerCoreHealth"] ~= 0)then
-		health = Citizen.InvokeNative(0x36731AC041289BB1, PlayerPedId(), 0) --ACTUAL HEALTH CORE GETTER
-		newHealth = health + tonumber(ItemsToUse[index]["InnerCoreHealth"])
-		if (newHealth > 100) then	newHealth = 100		end
-		Citizen.InvokeNative(0xC6258F41D86676E0, PlayerPedId(), 0, newHealth)
-	end
-
-		--TO DO OUTER CORE HEALTH parametro = outerCoreHealth
+	end	
 	--GOLDS
 	if (ItemsToUse[index]["InnerCoreStaminaGold"] ~= 0.0) then
+		-- EnableAttributeCoreOverpower
 		Citizen.InvokeNative(0x4AF5A4C7B9157D14, PlayerPedId(), 1, ItemsToUse[index]["InnerCoreStaminaGold"], true)
 	end
 	if (ItemsToUse[index]["OuterCoreStaminaGold"] ~= 0.0) then
+		-- EnableAttributeOverpower
 		Citizen.InvokeNative(0xF6A7C08DF2E28B28, PlayerPedId(), 1, ItemsToUse[index]["OuterCoreStaminaGold"], true)
 	end
+
+	-- CORES
+	if (ItemsToUse[index]["InnerCoreHealth"] ~= 0)then
+		-- GetAttributeCoreValue
+		local health = Citizen.InvokeNative(0x36731AC041289BB1, PlayerPedId(), 0) --ACTUAL HEALTH CORE GETTER
+		if health == false then
+			newHealth = tonumber(ItemsToUse[index]["InnerCoreHealth"])
+			Citizen.InvokeNative(0xC6258F41D86676E0, PlayerPedId(), 0, newHealth)	
+		else
+			-- GetAttributeCoreValue
+			health = Citizen.InvokeNative(0x36731AC041289BB1, PlayerPedId(), 0)	
+			newHealth = health + tonumber(ItemsToUse[index]["InnerCoreHealth"])
+			if (newHealth > 100) then	newHealth = 100		end			
+			-- SetAttributeCoreValue
+			Citizen.InvokeNative(0xC6258F41D86676E0, PlayerPedId(), 0, newHealth)
+		end
+	end 
+	--GOLDS 
 	if (ItemsToUse[index]["InnerCoreHealthGold"] ~= 0.0) then
+		-- EnableAttributeCoreOverpower
 		Citizen.InvokeNative(0x4AF5A4C7B9157D14, PlayerPedId(), 0, ItemsToUse[index]["InnerCoreHealthGold"], true)
 	end
 	if	(ItemsToUse[index]["OuterCoreHealthGold"] ~= 0.0) then
+		-- EnableAttributeOverpower
 		Citizen.InvokeNative(0xF6A7C08DF2E28B28, PlayerPedId(), 0, ItemsToUse[index]["OuterCoreHealthGold"], true)
 	end
+
 end)
 
 -- DRUNK EFFECT

@@ -3,6 +3,7 @@
     Loaded_Items_LiquidAlcoholDrink = false
     Loaded_Items_SolidFood = false
     Loaded_Items_Special = false
+    Loaded_Items_Medical = false
     Loaded_Items_Total = 0  
 
 Citizen.CreateThread(function()
@@ -16,20 +17,22 @@ Citizen.CreateThread(function()
         Citizen.Wait(1000)
         TriggerServerEvent(Config.ScriptName..":SendReady", "Food")	          
     end 
-
-    --print(Config.ScriptName..":ReadyCheck - Drink",Loaded_Items_LiquidDrink)  
+ 
     while Loaded_Items_LiquidDrink == false do 
         Citizen.Wait(1000)    
         TriggerServerEvent(Config.ScriptName..":SendReady", "Drink")	 
     end      
-    
-    --print(Config.ScriptName..":ReadyCheck - Alcohol",Loaded_Items_LiquidAlcoholDrink)  
+     
     while Loaded_Items_LiquidAlcoholDrink == false do 
         Citizen.Wait(1000)
         TriggerServerEvent(Config.ScriptName..":SendReady", "Alcohol")	 
     end  
+	 
+    while Loaded_Items_LiquidAlcoholDrink == false do 
+        Citizen.Wait(1000)
+        TriggerServerEvent(Config.ScriptName..":SendReady", "Medical")	 
+    end   
 
-    --print(Config.ScriptName..":ReadyCheck - Alcohol",Loaded_Items_Special)  
     while Loaded_Items_Special == false do 
         Citizen.Wait(1000)
         TriggerServerEvent(Config.ScriptName..":SendReady", "Special")	 
@@ -49,6 +52,9 @@ Citizen.CreateThread(function()
     end  
     if Loaded_Items_LiquidAlcoholDrink == true then  	    
 	    TriggerServerEvent(Config.ScriptName..":sendItemsRequested", "Alcohol")	
+    end  
+    if Loaded_Items_LiquidAlcoholDrink == true then  	    
+	    TriggerServerEvent(Config.ScriptName..":sendItemsRequested", "Medical")	
     end  
     if Loaded_Items_Special == true then  	    
 	    TriggerServerEvent(Config.ScriptName..":sendItemsRequested", "Special")	
@@ -102,6 +108,17 @@ AddEventHandler(new_event_clientside_ReadyCheckAlcohol, function(check, max)
     Loaded_Items_Total = max -1
 end) 
 
+local clientside_ReadyCheckMedical= "catch:ReadyCheck:Medical"
+local new_event_clientside_ReadyCheckMedical = Config.ScriptName..":"..clientside_ReadyCheckMedical
+print("Registered Event:", new_event_clientside_ReadyCheckMedical)
+RegisterNetEvent(new_event_clientside_ReadyCheckMedical)
+AddEventHandler(new_event_clientside_ReadyCheckMedical, function(check, max)  		
+	--print(Config.ScriptName..": Caught item: ",check, max)
+    Loaded_Items_Medical = check 
+    Loaded_Items_Total = max -1
+end) 
+
+
 local clientside_ReadyCheckSpecial = "catch:ReadyCheck:Special"
 local new_event_clientside_ReadyCheckSpecial = Config.ScriptName..":"..clientside_ReadyCheckSpecial 
 print("Registered Event:", new_event_clientside_ReadyCheckSpecial)
@@ -117,10 +134,10 @@ local clientside_detailedItem = "catch:detailedItem:Drink"
 local new_event_clientside_detailedItem = Config.ScriptName..":"..clientside_detailedItem 
 print("Registered Event:", new_event_clientside_detailedItem)
 RegisterNetEvent(new_event_clientside_detailedItem)
-AddEventHandler(new_event_clientside_detailedItem, function(ItemName, DisplayName, MetabolismRank, PropName)  
+AddEventHandler(new_event_clientside_detailedItem, function(ItemName, DisplayName, MetabolismRank, PropName, Animation)  
 	local TYPE = "Drink"
 	--print(Config.ScriptName..": Caught item: ",ItemName, DisplayName, MetabolismRank, PropName) 
-	local Animation = "drink"	
+	--local Animation = "drink"	
 	local Metabolism = 0	 	
 	local Hunger = 0		
 	local Thirst = 11		
@@ -137,6 +154,9 @@ AddEventHandler(new_event_clientside_detailedItem, function(ItemName, DisplayNam
 	local EffectDuration = 0 
 	if PropName == "" or PropName == 0 or PropName == nil then 
 		PropName = "p_mugcoffee01x" 
+	end 
+	if Animation == "" or Animation == 0 or Animation == nil then 
+		Animation = "drink" 
 	end 
 
 	flag_item_found = false
@@ -161,10 +181,10 @@ local clientside_detailedItemFood = "catch:detailedItem:Food"
 new_event_clientside_detailedItemFood = Config.ScriptName..":"..clientside_detailedItemFood 
 print("Registered Event:", new_event_clientside_detailedItemFood)
 RegisterNetEvent(new_event_clientside_detailedItemFood)
-AddEventHandler(new_event_clientside_detailedItemFood, function(ItemName, DisplayName, MetabolismRank, PropName)  
+AddEventHandler(new_event_clientside_detailedItemFood, function(ItemName, DisplayName, MetabolismRank, PropName, Animation)  
 	local TYPE = "Food"
 	--print(Config.ScriptName..": Caught item: ",ItemName, DisplayName, MetabolismRank, PropName)		 		 
-	local Animation = "eat"	 
+	--local Animation = "eat"	 
 	local Metabolism = 0	 	
 	local Hunger = 11		
 	local Thirst = 0		
@@ -182,6 +202,9 @@ AddEventHandler(new_event_clientside_detailedItemFood, function(ItemName, Displa
 	if PropName == "" or PropName == 0 or PropName == nil then 
 		PropName = "p_bread05x" 
 	end  
+	if Animation == "" or Animation == 0 or Animation == nil then 
+		Animation = "eat" 
+	end 
 
 	flag_item_found = false
 	for n,m in pairs(ItemsToUse) do   
@@ -206,10 +229,10 @@ local clientside_detailedItemAlcohol = "catch:detailedItem:Alcohol"
 local new_event_clientside_detailedItemAlcohol = Config.ScriptName..":"..clientside_detailedItemAlcohol 
 print("Registered Event:", new_event_clientside_detailedItemAlcohol)
 RegisterNetEvent(new_event_clientside_detailedItemAlcohol)
-AddEventHandler(new_event_clientside_detailedItemAlcohol, function(ItemName, DisplayName, MetabolismRank, PropName)  	
+AddEventHandler(new_event_clientside_detailedItemAlcohol, function(ItemName, DisplayName, MetabolismRank, PropName, Animation)  	
 	local TYPE = "Alcohol"
 	--print(Config.ScriptName..": Caught item: ",ItemName, DisplayName, MetabolismRank, PropName) 
-	local Animation = "longbottle" 	
+	--local Animation = "longbottle" 	
 	local Metabolism = 500	 	
 	local Hunger = 0	
 	local Thirst = 11		
@@ -227,6 +250,60 @@ AddEventHandler(new_event_clientside_detailedItemAlcohol, function(ItemName, Dis
 	if PropName == "" or PropName == 0 or PropName == nil then 
 		PropName = "p_bottlebeer01a" 
 	end   
+	if Animation == "" or Animation == 0 or Animation == nil then 
+		Animation = "longbottle" 
+	end 
+
+	flag_item_found = false
+	for n,m in pairs(ItemsToUse) do   
+		if ItemsToUse[n]["Name"] == ItemName then 
+			-- item found moving on. 
+			flag_item_found = true  
+			-- update existing values 
+			SetItemsToUseTable(n, ItemName, TYPE,  DisplayName, MetabolismRank, PropName, Animation, Metabolism, Hunger, Thirst, InnerCoreStamina, InnerCoreStaminaGold, OuterCoreStaminaGold, InnerCoreHealth, InnerCoreHealthGold, OuterCoreHealthGold, HardAlcohol, SoftAlcohol, DrinkCount, Effect, EffectDuration) 
+		end 
+	end
+	if flag_item_found == false then 
+		-- Add item to the database 
+		local r = #ItemsToUse+1
+		table.insert(ItemsToUse, r)   
+		ItemsToUse[r] = {}                
+		BuildItemsToUseTable(r, ItemName, TYPE, DisplayName, MetabolismRank, PropName, Animation, Metabolism, Hunger, Thirst, InnerCoreStamina, InnerCoreStaminaGold, OuterCoreStaminaGold, InnerCoreHealth, InnerCoreHealthGold, OuterCoreHealthGold, HardAlcohol, SoftAlcohol, DrinkCount, Effect, EffectDuration)
+    end 
+end)
+
+
+
+
+local clientside_detailedItemMedical= "catch:detailedItem:Medical"
+local new_event_clientside_detailedItemMedical = Config.ScriptName..":"..clientside_detailedItemMedical
+print("Registered Event:", new_event_clientside_detailedItemMedical)
+RegisterNetEvent(new_event_clientside_detailedItemMedical)
+AddEventHandler(new_event_clientside_detailedItemMedical, function(ItemName, DisplayName, MetabolismRank, PropName, Animation)  	
+	local TYPE = "Medical"
+	--print(Config.ScriptName..": Caught item: ",ItemName, DisplayName, MetabolismRank, PropName) 
+	--local Animation = "longbottle" 	
+	local Metabolism = 500	 	
+	local Hunger = 0	
+	local Thirst = 11		
+	local InnerCoreStamina = 0		
+	local InnerCoreStaminaGold = 25		
+	local OuterCoreStaminaGold = 25		
+	local InnerCoreHealth = 0		        
+	local InnerCoreHealthGold = 25		
+	local OuterCoreHealthGold = 25		
+	local HardAlcohol = false		
+	local SoftAlcohol = false		
+	local DrinkCount = 12		
+	local Effect = "PlayerDrunkSaloon1"		
+	local EffectDuration = 5000 
+	if PropName == "" or PropName == 0 or PropName == nil then 
+		PropName = "p_bottlebeer01a" 
+	end   
+	if Animation == "" or Animation == 0 or Animation == nil then 
+		Animation = "medical" 
+	end 
+
 
 	flag_item_found = false
 	for n,m in pairs(ItemsToUse) do   
@@ -261,11 +338,13 @@ function BuildItemsToUseTable(KEY, ItemName, TYPE, DisplayName, MetabolismRank, 
 	ItemsToUse[r]["Animation"] = Animation  
 	table.insert(ItemsToUse[r], "PropName") 
 	ItemsToUse[r]["PropName"] = PropName   
-
-	if Metabolism == nil then Metabolism = 0 end 
+ 
 	if MetabolismRank == nil then MetabolismRank = 0 end 
+	ItemsToUse[r]["MetabolismRank"] = MetabolismRank 
+	
+	if Metabolism == nil then Metabolism = 0 end 
 	table.insert(ItemsToUse[r], "Metabolism") 
-	ItemsToUse[r]["Metabolism"] = Metabolism * MetabolismRank 
+	ItemsToUse[r]["Metabolism"] = Metabolism * MetabolismRank  
 	
 	if Hunger == nil then Hunger = 0 end 
 	table.insert(ItemsToUse[r], "Hunger") 
@@ -327,34 +406,50 @@ function SetItemsToUseTable(KEY, ItemName, TYPE,  DisplayName, MetabolismRank, P
 	ItemsToUse[r]["DisplayName"] = DisplayName  
 	ItemsToUse[r]["Animation"] = Animation   
 	ItemsToUse[r]["PropName"] = PropName    
+
 	if MetabolismRank == nil then MetabolismRank = 0 end 
+	ItemsToUse[r]["MetabolismRank"] = MetabolismRank  
+
 	if Metabolism == nil then Metabolism = 0 end 
 	ItemsToUse[r]["Metabolism"] = Metabolism * MetabolismRank  
+
 	if Hunger == nil then Hunger = 0 end 
 	ItemsToUse[r]["Hunger"] = Hunger * MetabolismRank 
+
 	if Thirst == nil then Thirst = 0 end 
 	ItemsToUse[r]["Thirst"] = Thirst * MetabolismRank  
+
 	if InnerCoreStamina == nil then InnerCoreStamina = 0 end    
 	ItemsToUse[r]["InnerCoreStamina"] = InnerCoreStamina  
+
 	if InnerCoreStaminaGold == nil then InnerCoreStaminaGold = 0 end
 	ItemsToUse[r]["InnerCoreStaminaGold"] = InnerCoreStaminaGold  
+
 	if OuterCoreStaminaGold == nil then OuterCoreStaminaGold = 0 end
 	ItemsToUse[r]["OuterCoreStaminaGold"] = OuterCoreStaminaGold   
+
 	if InnerCoreHealth == nil then InnerCoreHealth = 0 end 
 	ItemsToUse[r]["InnerCoreHealth"] = InnerCoreHealth  
+
 	if InnerCoreHealthGold == nil then InnerCoreHealthGold = 0 end 
 	ItemsToUse[r]["InnerCoreHealthGold"] = InnerCoreHealthGold  
+
 	if OuterCoreHealthGold == nil then OuterCoreHealthGold = 0 end 
-	ItemsToUse[r]["OuterCoreHealthGold"] = OuterCoreHealthGold    
+	ItemsToUse[r]["OuterCoreHealthGold"] = OuterCoreHealthGold   
+
 	if HardAlcohol == nil then HardAlcohol = 0 end 
 	ItemsToUse[r]["HardAlcohol"] = HardAlcohol  
+
 	if SoftAlcohol == nil then SoftAlcohol = 0 end 
-	ItemsToUse[r]["SoftAlcohol"] = SoftAlcohol  
+	ItemsToUse[r]["SoftAlcohol"] = SoftAlcohol 
+
 	if DrinkCount == nil then DrinkCount = 0 end 
 	ItemsToUse[r]["DrinkCount"] = DrinkCount   
+
 	ItemsToUse[r]["Effect"] = Effect  
 	if EffectDuration == nil then EffectDuration = 0 end 
 	ItemsToUse[r]["EffectDuration"] = EffectDuration 
+	
 end 
 
 

@@ -11,8 +11,72 @@ function syringe(index, PropName, Effect, EffectDuration )
 	if (Effect ~= "") then
 		ScreenEffect(Effect, EffectDuration)
 	end
+	healself(index)
 	DeleteEntity(syringe)
 	ClearPedTasks(ped)
+end 	
+ 
+function cigarette(index, PropName, Effect, EffectDuration )
+	local ped = PlayerPedId()
+	local coords = GetEntityCoords(ped) 
+	local boneIndex = 0
+	
+	local cigarette = CreateObject(GetHashKey(PropName), GetEntityCoords(ped), true, true, true)
+	AttachEntityToEntity(cigarette, PlayerPedId(), boneIndex, 0.02, 0.028, 0.001, 15.0, 175.0, 0.0, true, true, false, true, 1, true)
+	TaskStartScenarioInPlace(PlayerPedId(), GetHashKey("WORLD_HUMAN_SMOKE_INTERACTION"), -1, true, false, false, false)
+	Wait(5000)
+	healself(index)
+	if (Effect ~= "") then
+		ScreenEffect(Effect, EffectDuration)
+	end
+	DeleteEntity(cigarette)
+	ClearPedTasks(ped)
+end 
+
+function bandage(index, PropName, Effect, EffectDuration )
+	local ped = PlayerPedId()
+	local coords = GetEntityCoords(ped) 
+	local boneIndex = 0	
+	
+	local bandage = CreateObject(GetHashKey(PropName), GetEntityCoords(ped), true, true, true)
+	AttachEntityToEntity(bandage, PlayerPedId(), boneIndex, 0.02, 0.028, 0.001, 15.0, 175.0, 0.0, true, true, false, true, 1, true)
+	if IsPedMale(	ped --[[ Ped ]]) then
+		RequestAnimDict("script_re@bear_trap")
+		while not HasAnimDictLoaded("script_re@bear_trap") do
+			Wait(100)
+		end
+		TaskPlayAnim(ped, "script_re@bear_trap", "bandage_dailog01_victim", 8.0, -0.5, -1, 0, 0, true, 0, false, 0, false)
+	else 
+
+	end 
+	Wait(5000)
+	healself(index)
+	if (Effect ~= "") then
+		ScreenEffect(Effect, EffectDuration)
+	end
+	DeleteEntity(bandage)
+	ClearPedTasks(ped)
+end 
+
+function healself(index) 
+	local player = PlayerPedId() 
+
+	local coreIndex = 0
+    local health = GetAttributeCoreValue(player, coreIndex)
+    local newHealth = health + ItemsToUse[r]["InnerCoreHealth"]
+	local overPoweredHealthBool =	IsAttributeOverpowered( player, coreIndex )	
+	local overPoweredCoreHealthBool =	IsAttributeCoreOverpowered(	player, coreIndex )   
+		
+	coreIndex = 1
+    local stamina = GetAttributeCoreValue(ped, coreIndex)
+	local overPoweredStaminaBool =	IsAttributeCoreOverpowered(	player, coreIndex )
+    local newStamina = stamina + ItemsToUse[r]["InnerCoreStamina"]
+    Citizen.InvokeNative(0xC6258F41D86676E0, ped, 1, newStamina) --core 
+
+    local health2 = GetEntityHealth(ped)
+    local newHealth2 = health2 + (ItemsToUse[index]["MetabolismRank"] * 11)  
+    SetEntityHealth(ped, newHealth2)	 
+ 
 end 	
 
 function berry(index, PropName, Effect, EffectDuration )
@@ -51,7 +115,7 @@ function bowl(index, PropName, Effect, EffectDuration )
 	DeleteEntity(spoon)
 end 
 
-function shortbottole(index, PropName, Effect, EffectDuration, DrinkCount, SoftAlcohol, HardAlcohol)
+function shortbottle(index, PropName, Effect, EffectDuration, DrinkCount, SoftAlcohol, HardAlcohol)
 	local ped = PlayerPedId()
 	local coords = GetEntityCoords(ped)
 	local propEntity = CreateObject(GetHashKey(PropName), GetEntityCoords(PlayerPedId()), false, true, false, false, true)
@@ -98,6 +162,7 @@ function shortbottole(index, PropName, Effect, EffectDuration, DrinkCount, SoftA
 			end
 		end
 	end
+	ClearPedSecondaryTask(ped)
 end 	
 	
 function longbottle(index, PropName, Effect, EffectDuration, DrinkCount, SoftAlcohol, HardAlcohol)
@@ -145,7 +210,8 @@ function longbottle(index, PropName, Effect, EffectDuration, DrinkCount, SoftAlc
 					end
 				end
 			end
-		end
+		end		
+		ClearPedSecondaryTask(ped)
 	end 	
 
 function drink_cup(index, PropName, Effect, EffectDuration)
@@ -198,6 +264,10 @@ function eat(index, PropName, Effect, EffectDuration)
 	ClearPedSecondaryTask(ped)
 end 
 
+RegisterNetEvent('prop:bandage')
+AddEventHandler('prop:bandage', function(index, PropName, Effect, EffectDuration)  
+	bandage(index, PropName, Effect, EffectDuration)
+end) 
 
 RegisterNetEvent('prop:eat')
 AddEventHandler('prop:eat', function(index, PropName, Effect, EffectDuration)  
@@ -221,7 +291,7 @@ end)
 
 RegisterNetEvent('prop:shortbottle')
 AddEventHandler('prop:shortbottle', function(index, PropName, Effect, EffectDuration)   
-	shortbottole(index, PropName, Effect, EffectDuration, DrinkCount, SoftAlcohol, HardAlcohol)
+	shortbottle(index, PropName, Effect, EffectDuration, DrinkCount, SoftAlcohol, HardAlcohol)
 end) 
 
 RegisterNetEvent('prop:longbottle')
@@ -239,7 +309,12 @@ AddEventHandler('prop:berry', function(index, PropName, Effect, EffectDuration)
 	berry(index, PropName, Effect, EffectDuration) 
 end)  
  
-
+RegisterNetEvent('prop:cigarette')
+AddEventHandler('prop:cigarette', function(index, PropName, Effect, EffectDuration)   
+	cigarette(index, PropName, Effect, EffectDuration) 
+end)  
+ 
+ 
 function PlayAnimation(ped, anim)
 	--print("fredmeta:PlayAnimation - active")
 	if not DoesAnimDictExist(anim.dict) then
